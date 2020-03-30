@@ -27,13 +27,26 @@ HalfEdgeMesh::~HalfEdgeMesh() {}
  */
 bool HalfEdgeMesh::AddFace(const std::vector<Vector3<float> > &verts) {
   // Add your code here
-  std::cerr << "ADD TRIANGLE NOT IMPLEMENTED. ";
-
   // Add the vertices of the face/triangle
 
-  // Add all half-edge pairs
+	size_t v0, v1, v2;
 
+        AddVertex(verts[0], v0);
+        AddVertex(verts[1], v1);
+        AddVertex(verts[2], v2);
+
+
+  // Add all half-edge pairs
+        size_t HalfEdge01, HalfEdge10, HalfEdge12, HalfEdge21, HalfEdge02, HalfEdge20;
+
+        AddHalfEdgePair(v0, v1, HalfEdge01, HalfEdge10);
+        AddHalfEdgePair(v1, v2, HalfEdge12, HalfEdge21);
+        AddHalfEdgePair(v2, v0, HalfEdge20, HalfEdge02);
+         
+	
   // Connect inner ring
+
+		
 
   // Finally, create the face, don't forget to set the normal (which should be
   // normalized)
@@ -76,8 +89,7 @@ bool HalfEdgeMesh::AddVertex(const Vector3<float> &v, size_t &indx) {
  * half-edge from v2 to v1, size_t \return a bool indicating whether the
  * half-edge pair was successfully inserted (true) or already existed (false)
  */
-bool HalfEdgeMesh::AddHalfEdgePair(size_t v1, size_t v2, size_t &indx1,
-                                   size_t &indx2) {
+bool HalfEdgeMesh::AddHalfEdgePair(size_t v1, size_t v2, size_t &indx1, size_t &indx2) {
   std::map<OrderedPair, size_t>::iterator it =
       mUniqueEdgePairs.find(OrderedPair(v1, v2));
   if (it != mUniqueEdgePairs.end()) {
