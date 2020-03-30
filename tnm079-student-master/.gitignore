@@ -1,0 +1,20 @@
+.DS_Store
+.idea
+.vscode
+
+build
+cmake-build-debug
+cmake-build-minsizerel
+cmake-build-release
+cmake-build-relwithdebinfo
+
+*.html
+# Build files from LaTeX
+*.aux
+*.bbl
+*.blg
+*.fdb_latexmk
+*.fls
+*.log
+*-blx.bib
+*.run.xml
