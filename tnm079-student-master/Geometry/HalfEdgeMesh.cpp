@@ -45,8 +45,14 @@ bool HalfEdgeMesh::AddFace(const std::vector<Vector3<float> > &verts) {
          
 	
   // Connect inner ring
+	e(HalfEdge01).next = HalfEdge12;
+    e(HalfEdge01).prev = HalfEdge20;
 
-		
+	e(HalfEdge12).next = HalfEdge20;
+    e(HalfEdge12).prev = HalfEdge01;
+
+    e(HalfEdge20).next = HalfEdge01;
+    e(HalfEdge20).prev = HalfEdge20;
 
   // Finally, create the face, don't forget to set the normal (which should be
   // normalized)
@@ -124,8 +130,9 @@ bool HalfEdgeMesh::AddHalfEdgePair(size_t v1, size_t v2, size_t &indx1, size_t &
 
   // Store the first edge in the map as an OrderedPair
   OrderedPair op(v1, v2);
-  mUniqueEdgePairs[op] =
-      indx1; // op. [ ] constructs a new entry in map, ordering not important
+  mUniqueEdgePairs[op] = indx1;
+  
+  // op. [ ] constructs a new entry in map, ordering not important
   // sorting done when retrieving
 
   return true;
