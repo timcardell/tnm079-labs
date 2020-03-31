@@ -59,7 +59,7 @@ bool HalfEdgeMesh::AddFace(const std::vector<Vector3<float> > &verts) {
 
 
     Face face;
-    face.edge = HalfEdge01;
+    face.edge = HalfEdge12;
     mFaces.push_back(face);
 
     size_t faceIndex = mFaces.size()-1;
@@ -256,14 +256,18 @@ HalfEdgeMesh::FindNeighborVertices(size_t vertexIndex) const {
   // Collected vertices, sorted counter clockwise!
   std::vector<size_t> oneRing;
 
-  HalfEdge E;
-  E = e(v(vertexIndex).edge);
+  HalfEdge E = e(e(v(vertexIndex).edge).next);
+  size_t startindx = E.vert;
+  size_t indx = startindx;
 
-  oneRing.push_back(e(E.pair).vert);
-  oneRing.push_back(e(E.next).vert);
-  oneRing.push_back(e(E.prev).vert);
-
-
+  do {
+      oneRing.push_back(indx);
+      E = e(E.next);
+      E = e(E.pair);
+      E = e(E.next);
+      indx = E.vert;
+      
+  } while (indx != startindx);
   return oneRing;
 }
 
@@ -275,10 +279,24 @@ HalfEdgeMesh::FindNeighborVertices(size_t vertexIndex) const {
 std::vector<size_t> HalfEdgeMesh::FindNeighborFaces(size_t vertexIndex) const {
   // Collected faces, sorted counter clockwise!
   std::vector<size_t> foundFaces;
+  std::vector<size_t> vertices = FindNeighborVertices(vertexIndex);
+  std::cout << vertices.at(0) << "," << vertices.at(1) << "," << vertices.at(2) << std::endl;
 
-  HalfEdge E = e(v(vertexIndex).edge);
+  HalfEdge E = e(e(v(vertexIndex).edge).next);
 
-  foundFaces.push_back(E.face);
+    size_t startindx = E.vert;
+  size_t indx = startindx;
+
+  do {
+      foundFaces.push_back(E.face);
+      E = e(E.next);
+      E = e(E.pair);
+      E = e(E.next);
+      indx = E.vert;
+
+  } while (indx != startindx);
+
+  return foundFaces;
 
 
   // Add your code here
