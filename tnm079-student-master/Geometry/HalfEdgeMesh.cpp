@@ -343,7 +343,19 @@ Vector3<float> HalfEdgeMesh::VertexNormal(size_t vertexIndex) const {
 
     // Add your code here
 
-    return n;
+  // Add your code here
+
+  std::vector<size_t> faces = HalfEdgeMesh::FindNeighborFaces(vertexIndex);
+  for(int i = 0; i < faces.size(); i++){
+     n += f(faces[i]).normal;
+
+  }
+
+    n = n.Normalize();
+
+
+
+  return n;
 }
 
 void HalfEdgeMesh::Initialize() {
@@ -425,7 +437,7 @@ float HalfEdgeMesh::Area() const {
         HalfEdge E0 = e(F.edge);
         HalfEdge E1 = e(E0.next);
         HalfEdge E2 = e(E0.prev);
-              
+
 		area += 0.5f * Cross((v(E1.vert).pos - v(E0.vert).pos), (v(E2.vert).pos - v(E1.vert).pos)).Length();
     }
     return area;
