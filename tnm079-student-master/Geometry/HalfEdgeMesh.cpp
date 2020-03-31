@@ -251,8 +251,7 @@ void HalfEdgeMesh::Validate() {
  * counter clockwise. \param [in] vertexIndex  the index to vertex, size_t
  * \return a vector containing the indices to all the found vertices.
  */
-std::vector<size_t>
-HalfEdgeMesh::FindNeighborVertices(size_t vertexIndex) const {
+std::vector<size_t>HalfEdgeMesh::FindNeighborVertices(size_t vertexIndex) const {
   // Collected vertices, sorted counter clockwise!
   std::vector<size_t> oneRing;
 
@@ -278,35 +277,50 @@ HalfEdgeMesh::FindNeighborVertices(size_t vertexIndex) const {
  */
 std::vector<size_t> HalfEdgeMesh::FindNeighborFaces(size_t vertexIndex) const {
   // Collected faces, sorted counter clockwise!
+
   std::vector<size_t> foundFaces;
   std::vector<size_t> vertices = FindNeighborVertices(vertexIndex);
-  std::cout << vertices.at(0) << "," << vertices.at(1) << "," << vertices.at(2) << std::endl;
 
-  HalfEdge E = e(e(v(vertexIndex).edge).next);
-
-    size_t startindx = E.vert;
-  size_t indx = startindx;
-
-  do {
-      foundFaces.push_back(E.face);
-      E = e(E.next);
-      E = e(E.pair);
-      E = e(E.next);
-      indx = E.vert;
-
-  } while (indx != startindx);
+  HalfEdge E0 = e(e(v(vertices.at(0)).edge).next);
+  HalfEdge E1 = e(e(v(vertices.at(1)).edge).next);
+  HalfEdge E2 = e(e(v(vertices.at(2)).edge).next);
+  foundFaces.push_back(E0.face);
+  foundFaces.push_back(E1.face);
+  foundFaces.push_back(E2.face);
 
   return foundFaces;
 
-
-  // Add your code here
-  return foundFaces;
 }
 
 /*! \lab1 Implement the curvature */
 float HalfEdgeMesh::VertexCurvature(size_t vertexIndex) const {
-  // Copy code from SimpleMesh or compute more accurate estimate
-  return 0;
+
+    std::vector<size_t> oneRing = FindNeighborVertices(vertexIndex);
+    assert(oneRing.size() != 0);
+
+    size_t curr, next;
+    const Vector3<float> &vi = mVerts.at(vertexIndex).pos;
+    float angleSum = 0;
+    float area = 0;
+    for (size_t i = 0; i < oneRing.size(); i++) {
+        // connections
+        curr = oneRing.at(i);
+        if (i < oneRing.size() - 1)
+            next = oneRing.at(i + 1);
+        else
+            next = oneRing.front();
+
+        // find vertices in 1-ring according to figure 5 in lab text
+        // next - beta
+        const Vector3<float> &nextPos = mVerts.at(next).pos;
+        const Vector3<float> &vj = mVerts.at(curr).pos;
+
+        // compute angle and area
+        angleSum +=
+            acos((vj - vi) * (nextPos - vi) / ((vj - vi).Length() * (nextPos - vi).Length()));
+        area += Cross((vi - vj), (nextPos - vj)).Length() * 0.5f;
+    }
+    return (2.0f * static_cast<float>(M_PI) - angleSum) / area;
 }
 
 float HalfEdgeMesh::FaceCurvature(size_t faceIndex) const {
