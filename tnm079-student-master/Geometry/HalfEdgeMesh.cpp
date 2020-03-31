@@ -341,8 +341,6 @@ Vector3<float> HalfEdgeMesh::VertexNormal(size_t vertexIndex) const {
 
     Vector3<float> n(0, 0, 0);
 
-    // Add your code here
-
   // Add your code here
 
   std::vector<size_t> faces = HalfEdgeMesh::FindNeighborFaces(vertexIndex);
@@ -448,6 +446,26 @@ float HalfEdgeMesh::Volume() const {
     float volume = 0;
     // Add code here
     std::cerr << "Volume calculation not implemented for half-edge mesh!\n";
+
+
+    HalfEdge halfEdge;
+    for (int i = 0; i < mFaces.size(); i++) {
+        halfEdge = mEdges[mFaces[i].edge];
+        const Vector3<float> v1 = v(halfEdge.vert).pos;
+        const Vector3<float> v2 = v(e(halfEdge.next).vert).pos;
+        const Vector3<float> v3 = v(e(halfEdge.prev).vert).pos;
+
+        const Vector3<float> vec1 = (v2 - v1);
+        const Vector3<float> vec2 = (v3 - v1);
+
+        float area = Cross(vec1, vec2).Length()*0.5;
+        volume += (((v1 + v2 + v3) / 3.0) *mFaces[i].normal*area) / 3.0;
+
+    }
+
+    std::cerr << "Volume = " << volume << "\n";
+    std::cerr << "Side = " << half << "\n";
+
     return volume;
 }
 
