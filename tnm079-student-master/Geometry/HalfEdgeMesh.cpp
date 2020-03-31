@@ -263,10 +263,9 @@ std::vector<size_t> HalfEdgeMesh::FindNeighborFaces(size_t vertexIndex) const {
     // Collected faces, sorted counter clockwise!
 
     std::vector<size_t> foundFaces;
-    std::vector<size_t> vertices = FindNeighborVertices(vertexIndex);
-    HalfEdge E = e(e(v(vertexIndex).edge).next);
+    HalfEdge E = e(v(vertexIndex).edge);
+
     size_t startindx = E.face;
-    size_t start = vertexIndex;
     size_t indx = startindx;
 
     do {
@@ -305,8 +304,7 @@ float HalfEdgeMesh::VertexCurvature(size_t vertexIndex) const {
         const Vector3<float> &vj = mVerts.at(curr).pos;
 
         // compute angle and area
-        angleSum +=
-            acos((vj - vi) * (nextPos - vi) / ((vj - vi).Length() * (nextPos - vi).Length()));
+        angleSum += acos((vj - vi) * (nextPos - vi) / ((vj - vi).Length() * (nextPos - vi).Length()));
         area += Cross((vi - vj), (nextPos - vj)).Length() * 0.5f;
     }
     return (2.0f * static_cast<float>(M_PI) - angleSum) / area;
@@ -341,20 +339,12 @@ Vector3<float> HalfEdgeMesh::VertexNormal(size_t vertexIndex) const {
 
     Vector3<float> n(0, 0, 0);
 
-    // Add your code here
-
-  // Add your code here
-
-  std::vector<size_t> faces = HalfEdgeMesh::FindNeighborFaces(vertexIndex);
-  for(int i = 0; i < faces.size(); i++){
-     n += f(faces[i]).normal;
-
+  std::vector<size_t> faces = FindNeighborFaces(vertexIndex);
+  for(int i = 0; i < faces.size()-1; i++){
+     n += f(faces.at(i)).normal;
   }
 
-    n = n.Normalize();
-
-
-
+  n = n.Normalize();
   return n;
 }
 
@@ -379,7 +369,7 @@ void HalfEdgeMesh::Update() {
     // Then update vertex curvature
     for (size_t i = 0; i < GetNumVerts(); i++) {
         mVerts.at(i).curvature = VertexCurvature(i);
-        //    std::cerr <<   mVerts.at(i).curvature << "\n";
+            std::cerr <<   mVerts.at(i).curvature << "\n";
     }
 
     // Finally update face curvature
