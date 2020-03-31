@@ -57,7 +57,20 @@ bool HalfEdgeMesh::AddFace(const std::vector<Vector3<float> > &verts) {
   // Finally, create the face, don't forget to set the normal (which should be
   // normalized)
 
+
+    Face face;
+    face.edge = HalfEdge01;
+    mFaces.push_back(face);
+
+    size_t faceIndex = mFaces.size()-1;
+    f(faceIndex).normal = FaceNormal(faceIndex);
+
+
+
   // All half-edges share the same left face (previously added)
+    e(HalfEdge01).face = faceIndex;
+    e(HalfEdge12).face = faceIndex;
+    e(HalfEdge20).face = faceIndex;
 
   // Optionally, track the (outer) boundary half-edges
   // to represent non-closed surfaces
@@ -243,7 +256,13 @@ HalfEdgeMesh::FindNeighborVertices(size_t vertexIndex) const {
   // Collected vertices, sorted counter clockwise!
   std::vector<size_t> oneRing;
 
-  // Add your code here
+  HalfEdge E;
+  E = e(v(vertexIndex).edge);
+
+  oneRing.push_back(e(E.pair).vert);
+  oneRing.push_back(e(E.next).vert);
+  oneRing.push_back(e(E.prev).vert);
+
 
   return oneRing;
 }
@@ -256,6 +275,11 @@ HalfEdgeMesh::FindNeighborVertices(size_t vertexIndex) const {
 std::vector<size_t> HalfEdgeMesh::FindNeighborFaces(size_t vertexIndex) const {
   // Collected faces, sorted counter clockwise!
   std::vector<size_t> foundFaces;
+
+  HalfEdge E = e(v(vertexIndex).edge);
+
+  foundFaces.push_back(E.face);
+
 
   // Add your code here
   return foundFaces;
