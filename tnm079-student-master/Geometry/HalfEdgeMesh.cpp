@@ -453,7 +453,7 @@ float HalfEdgeMesh::Volume() const {
 
     }
 
-    std::cerr << "Volume = " << volume << "\n";
+    
 
 
     return volume;
