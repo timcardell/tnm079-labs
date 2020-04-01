@@ -436,7 +436,6 @@ float HalfEdgeMesh::Area() const {
 float HalfEdgeMesh::Volume() const {
     float volume = 0;
     // Add code here
-    std::cerr << "Volume calculation not implemented for half-edge mesh!\n";
 
 
     HalfEdge halfEdge;
@@ -465,7 +464,11 @@ int HalfEdgeMesh::Shells() const { return 1; }
 
 /*! \lab1 Implement the genus */
 size_t HalfEdgeMesh::Genus() const {
-    // Add code here
+
+    size_t genus  = (1 - (GetNumVerts() + GetNumFaces() - (GetNumEdges()/2)))/2;
+
+    return genus;
+
     std::cerr << "Genus calculation not implemented for half-edge mesh!\n";
     return 0;
 }
