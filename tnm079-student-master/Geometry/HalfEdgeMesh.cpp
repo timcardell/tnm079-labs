@@ -49,13 +49,13 @@ bool HalfEdgeMesh::AddFace(const std::vector<Vector3<float> > &verts) {
     e(HalfEdge12).prev = HalfEdge01;
 
     e(HalfEdge20).next = HalfEdge01;
-    e(HalfEdge20).prev = HalfEdge20;
+    e(HalfEdge20).prev = HalfEdge12;
 
     // Finally, create the face, don't forget to set the normal (which should be
     // normalized)
 
     Face face;
-    face.edge = HalfEdge12;
+    face.edge = HalfEdge01;
     mFaces.push_back(face);
 
     size_t faceIndex = mFaces.size() - 1;
@@ -238,7 +238,6 @@ std::vector<size_t> HalfEdgeMesh::FindNeighborVertices(size_t vertexIndex) const
 
     HalfEdge E = e(e(v(vertexIndex).edge).next);
     size_t startindx = E.vert;
-    size_t start = vertexIndex;
 
     size_t indx = startindx;
 
@@ -270,9 +269,8 @@ std::vector<size_t> HalfEdgeMesh::FindNeighborFaces(size_t vertexIndex) const {
 
     do {
         foundFaces.push_back(indx);
-        E = e(E.next);
+        E = e(E.prev);
         E = e(E.pair);
-        E = e(E.next);
         indx = E.face;
 
     } while (indx != startindx);
@@ -308,6 +306,7 @@ float HalfEdgeMesh::VertexCurvature(size_t vertexIndex) const {
         area += Cross((vi - vj), (nextPos - vj)).Length() * 0.5f;
     }
     return (2.0f * static_cast<float>(M_PI) - angleSum) / area;
+   // return (2.0f * static_cast<float>(M_PI) - angleSum) / 4 *area;
 }
 
 float HalfEdgeMesh::FaceCurvature(size_t faceIndex) const {
@@ -340,7 +339,7 @@ Vector3<float> HalfEdgeMesh::VertexNormal(size_t vertexIndex) const {
     Vector3<float> n(0, 0, 0);
 
   std::vector<size_t> faces = FindNeighborFaces(vertexIndex);
-  for(int i = 0; i < faces.size()-1; i++){
+  for(int i = 0; i < faces.size(); i++){
      n += f(faces.at(i)).normal;
   }
 
@@ -369,7 +368,7 @@ void HalfEdgeMesh::Update() {
     // Then update vertex curvature
     for (size_t i = 0; i < GetNumVerts(); i++) {
         mVerts.at(i).curvature = VertexCurvature(i);
-            std::cerr <<   mVerts.at(i).curvature << "\n";
+       //     std::cerr <<   mVerts.at(i).curvature << "\n";
     }
 
     // Finally update face curvature
@@ -455,8 +454,6 @@ float HalfEdgeMesh::Volume() const {
 
     }
 
-    std::cerr << "Volume = " << volume << "\n";
-    std::cerr << "Side = " << half << "\n";
 
     return volume;
 }
