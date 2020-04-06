@@ -17,8 +17,7 @@ void SimpleDecimationMesh::computeCollapse(EdgeCollapse *collapse) {
   // the vertex-to-vertex distance between the new vertex
   // and the old vertices at the edge's endpoints
   const Vector3<float> &v0 = mVerts[mEdges[collapse->halfEdge].vert].pos;
-  const Vector3<float> &v1 =
-      mVerts[mEdges[mEdges[collapse->halfEdge].pair].vert].pos;
+  const Vector3<float> &v1 = mVerts[mEdges[mEdges[collapse->halfEdge].pair].vert].pos;
   collapse->position = (v0 + v1) * 0.5;
   collapse->cost = (collapse->position - v0).Length();
 }

@@ -1,4 +1,4 @@
-# Copyright Linköping University 2010
+# Copyright Linkï¿½ping University 2010
 # Author Stefan Lindholm <stefan.lindholm@liu.se>
 
 if(BUILD_LAB2)
