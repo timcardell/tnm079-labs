@@ -51,29 +51,34 @@ void QuadricDecimationMesh::computeCollapse(EdgeCollapse *collapse) {
 
     Matrix4x4<float> Q1 = mQuadrics.at(edge.vert); 
     Matrix4x4<float> Q2 = mQuadrics.at(e(edge.pair).vert); 
-    Matrix4x4<float> Q_Sum = Q1 + Q2;
+    Matrix4x4<float> Q_sum = Q1 + Q2;
 
+    Matrix4x4<float> BigQ = Q_sum;
 
-    Matrix4x4<float> BigQ(Q_Sum);
-    Vector4<float> vec =Vector4<float>(0,0,0,1);
-    BigQ(0, 3) = vec[0];
-    BigQ(1, 3) = vec[1];
-    BigQ(2, 3) = vec[2];
-    BigQ(3, 3) = vec[3];
-    Vector4<float> V_hat;
+    Q_sum(3, 0) = 0.0f;
+    Q_sum(3, 1) = 0.0f;
+    Q_sum(3, 2) = 0.0f;
+    Q_sum(3, 3) = 1.0f;
 
-    if (BigQ.IsSingular()) {
-        Vector3<float> pos = (v(edge.vert).pos + v(e(edge.pair).vert).pos) *0.5f;
-        V_hat = Vector4<float>(pos[0],pos[1],pos[2],1);
-        collapse->position = (V_hat[0], V_hat[1], V_hat[2]);
+     Vector4<float> vec = Vector4<float>{0.0f, 0.0f, 0.0f, 1.0f};
+     Vector4<float> V_hat;
+
+    if (!Q_sum.IsSingular()) {
+
+        V_hat = Q_sum.Inverse() * vec;
+        Vector3<float> pos = Vector3<float>(V_hat[0], V_hat[1], V_hat[2]);
+        collapse->position = pos;
+
+    } else {
+        collapse->position = (v(edge.vert).pos + v(e(edge.pair).vert).pos) * 0.5f;
+        V_hat = Vector4<float>{collapse->position[0], collapse->position[1], collapse->position[2], 1.0f};
     }
-    else {
-        V_hat = BigQ.Inverse() * vec;
-        collapse->position = (V_hat[0],V_hat[1],V_hat[2]);
+    float coast = 0;
+    Vector4<float> frischt = (BigQ * V_hat);
+    for (int i = 0; i < 4; i++) {
+        coast += V_hat[i] * frischt[i];
     }
-
-    float frischt = V_hat*(Q_Sum * V_hat);
-    collapse->cost = frischt;
+    collapse->cost = coast;
 }
 
 /*! After each edge collapse the vertex properties need to be updated */
@@ -96,9 +101,9 @@ QuadricDecimationMesh::createQuadricForVert(size_t indx) const {
     };
 
   Matrix4x4<float> Q(q) ;
-  for (size_t i = 0; i < Faceindx.size(); i++) {
+ for (size_t i = 0; i < Faceindx.size(); i++) {
       Q += createQuadricForFace(Faceindx.at(i));
-  }
+  };
 
   // The quadric for a vertex is the sum of all the quadrics for the adjacent
   // faces Tip: Matrix4x4 has an operator +=
@@ -130,7 +135,7 @@ QuadricDecimationMesh::createQuadricForFace(size_t indx) const {
           {p[0] * p[3], p[1] * p[3], p[2] * p[3], p[3] * p[3]}
     };
 
-    return Matrix4x4<float>(Kp);
+    return Matrix4x4<float>{Kp};
 }
 
 
