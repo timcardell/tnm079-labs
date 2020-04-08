@@ -49,7 +49,7 @@ bool HalfEdgeMesh::AddFace(const std::vector<Vector3<float> > &verts) {
     e(HalfEdge12).prev = HalfEdge01;
 
     e(HalfEdge20).next = HalfEdge01;
-    e(HalfEdge20).prev = HalfEdge20;
+    e(HalfEdge20).prev = HalfEdge12;
 
     // Finally, create the face, don't forget to set the normal (which should be
     // normalized)
@@ -270,9 +270,8 @@ std::vector<size_t> HalfEdgeMesh::FindNeighborFaces(size_t vertexIndex) const {
 
     do {
         foundFaces.push_back(indx);
-        E = e(E.next);
+        E = e(E.prev);
         E = e(E.pair);
-        E = e(E.next);
         indx = E.face;
 
     } while (indx != startindx);
@@ -340,7 +339,7 @@ Vector3<float> HalfEdgeMesh::VertexNormal(size_t vertexIndex) const {
     Vector3<float> n(0, 0, 0);
 
   std::vector<size_t> faces = FindNeighborFaces(vertexIndex);
-  for(int i = 0; i < faces.size()-1; i++){
+  for(int i = 0; i < faces.size(); i++){
      n += f(faces.at(i)).normal;
   }
 
@@ -456,7 +455,6 @@ float HalfEdgeMesh::Volume() const {
     }
 
     std::cerr << "Volume = " << volume << "\n";
-    std::cerr << "Side = " << half << "\n";
 
     return volume;
 }

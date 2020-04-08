@@ -11,7 +11,11 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8548d0de-25f3-40ae-b172-20e212342f5a" name="Default Changelist" comment="" />
+    <list default="true" id="8548d0de-25f3-40ae-b172-20e212342f5a" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tnm079-student-master/Decimation/QuadricDecimationMesh.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/tnm079-student-master/Decimation/QuadricDecimationMesh.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tnm079-student-master/Geometry/HalfEdgeMesh.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/tnm079-student-master/Geometry/HalfEdgeMesh.cpp" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -21,6 +25,9 @@
     <option name="formatViaClangd" value="false" />
   </component>
   <component name="ExecutionTargetManager" SELECTED_TARGET="CMakeBuildProfile:Debug" />
+  <component name="FavoritesManager">
+    <favorites_list name="MoA" />
+  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
@@ -38,12 +45,13 @@
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
+    <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
     <property name="ASKED_SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="cf.advertisement.text.has.clang-format" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
-    <property name="settings.editor.selected.configurable" value="CMakeSettings" />
+    <property name="settings.editor.selected.configurable" value="reference.settingsdialog.IDE.editor.colors.Color Scheme Font" />
   </component>
   <component name="RunManager">
     <configuration name="MoA" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="MoA" TARGET_NAME="MoA" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="MoA" RUN_TARGET_NAME="MoA">
@@ -63,6 +71,10 @@
       <option name="presentableId" value="Default" />
       <updated>1585550286598</updated>
       <workItem from="1585550288813" duration="13358000" />
+      <workItem from="1586292412548" duration="143000" />
+      <workItem from="1586295168314" duration="1060000" />
+      <workItem from="1586296697487" duration="4603000" />
+      <workItem from="1586355007214" duration="207000" />
     </task>
     <servers />
   </component>
@@ -70,33 +82,62 @@
     <option name="version" value="1" />
   </component>
   <component name="WindowStateProjectService">
+    <state x="320" y="89" key="#Notifications" timestamp="1586355249332">
+      <screen x="0" y="23" width="1440" height="801" />
+    </state>
+    <state x="320" y="89" key="#Notifications/0.23.1440.801@0.23.1440.801" timestamp="1586355249332" />
     <state x="104" y="39" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1585555235725">
       <screen x="0" y="23" width="1280" height="708" />
     </state>
     <state x="104" y="39" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.23.1280.708@0.23.1280.708" timestamp="1585555235725" />
-    <state width="1238" height="170" key="GridCell.Tab.0.bottom" timestamp="1585651820904">
-      <screen x="0" y="23" width="1280" height="708" />
+    <state width="1398" height="201" key="GridCell.Tab.0.bottom" timestamp="1586355175357">
+      <screen x="0" y="23" width="1440" height="801" />
     </state>
+    <state width="1440" height="250" key="GridCell.Tab.0.bottom/0.0.1440.900@0.0.1440.900" timestamp="1585730842677" />
     <state width="1238" height="170" key="GridCell.Tab.0.bottom/0.23.1280.708@0.23.1280.708" timestamp="1585651820904" />
-    <state width="1238" height="170" key="GridCell.Tab.0.center" timestamp="1585651820903">
-      <screen x="0" y="23" width="1280" height="708" />
+    <state width="803" height="208" key="GridCell.Tab.0.bottom/0.23.1440.796@0.23.1440.796" timestamp="1586270400786" />
+    <state width="803" height="208" key="GridCell.Tab.0.bottom/0.23.1440.798@0.23.1440.798" timestamp="1586292275271" />
+    <state width="1398" height="201" key="GridCell.Tab.0.bottom/0.23.1440.801@0.23.1440.801" timestamp="1586355175357" />
+    <state width="1398" height="201" key="GridCell.Tab.0.bottom/0.23.1440.804@0.23.1440.804" timestamp="1586348114076" />
+    <state width="1398" height="201" key="GridCell.Tab.0.center" timestamp="1586355175341">
+      <screen x="0" y="23" width="1440" height="801" />
     </state>
+    <state width="1440" height="250" key="GridCell.Tab.0.center/0.0.1440.900@0.0.1440.900" timestamp="1585730842676" />
     <state width="1238" height="170" key="GridCell.Tab.0.center/0.23.1280.708@0.23.1280.708" timestamp="1585651820903" />
-    <state width="1238" height="170" key="GridCell.Tab.0.left" timestamp="1585651820903">
-      <screen x="0" y="23" width="1280" height="708" />
+    <state width="803" height="208" key="GridCell.Tab.0.center/0.23.1440.796@0.23.1440.796" timestamp="1586270400785" />
+    <state width="803" height="208" key="GridCell.Tab.0.center/0.23.1440.798@0.23.1440.798" timestamp="1586292275270" />
+    <state width="1398" height="201" key="GridCell.Tab.0.center/0.23.1440.801@0.23.1440.801" timestamp="1586355175341" />
+    <state width="1398" height="201" key="GridCell.Tab.0.center/0.23.1440.804@0.23.1440.804" timestamp="1586348114075" />
+    <state width="1398" height="201" key="GridCell.Tab.0.left" timestamp="1586355175330">
+      <screen x="0" y="23" width="1440" height="801" />
     </state>
+    <state width="1440" height="250" key="GridCell.Tab.0.left/0.0.1440.900@0.0.1440.900" timestamp="1585730842675" />
     <state width="1238" height="170" key="GridCell.Tab.0.left/0.23.1280.708@0.23.1280.708" timestamp="1585651820903" />
-    <state width="1238" height="170" key="GridCell.Tab.0.right" timestamp="1585651820904">
-      <screen x="0" y="23" width="1280" height="708" />
+    <state width="803" height="208" key="GridCell.Tab.0.left/0.23.1440.796@0.23.1440.796" timestamp="1586270400784" />
+    <state width="803" height="208" key="GridCell.Tab.0.left/0.23.1440.798@0.23.1440.798" timestamp="1586292275270" />
+    <state width="1398" height="201" key="GridCell.Tab.0.left/0.23.1440.801@0.23.1440.801" timestamp="1586355175330" />
+    <state width="1398" height="201" key="GridCell.Tab.0.left/0.23.1440.804@0.23.1440.804" timestamp="1586348114075" />
+    <state width="1398" height="201" key="GridCell.Tab.0.right" timestamp="1586355175349">
+      <screen x="0" y="23" width="1440" height="801" />
     </state>
+    <state width="1440" height="250" key="GridCell.Tab.0.right/0.0.1440.900@0.0.1440.900" timestamp="1585730842677" />
     <state width="1238" height="170" key="GridCell.Tab.0.right/0.23.1280.708@0.23.1280.708" timestamp="1585651820904" />
-    <state x="149" y="23" width="982" height="708" key="SettingsEditor" timestamp="1585555405287">
-      <screen x="0" y="23" width="1280" height="708" />
+    <state width="803" height="208" key="GridCell.Tab.0.right/0.23.1440.796@0.23.1440.796" timestamp="1586270400785" />
+    <state width="803" height="208" key="GridCell.Tab.0.right/0.23.1440.798@0.23.1440.798" timestamp="1586292275270" />
+    <state width="1398" height="201" key="GridCell.Tab.0.right/0.23.1440.801@0.23.1440.801" timestamp="1586355175349" />
+    <state width="1398" height="201" key="GridCell.Tab.0.right/0.23.1440.804@0.23.1440.804" timestamp="1586348114076" />
+    <state x="443" y="36" width="982" height="708" key="SettingsEditor" timestamp="1586259814732">
+      <screen x="0" y="23" width="1440" height="796" />
     </state>
     <state x="149" y="23" width="982" height="708" key="SettingsEditor/0.23.1280.708@0.23.1280.708" timestamp="1585555405287" />
+    <state x="443" y="36" key="SettingsEditor/0.23.1440.796@0.23.1440.796" timestamp="1586259814732" />
     <state x="305" y="168" key="run.anything.popup" timestamp="1585554489734">
       <screen x="0" y="23" width="1280" height="708" />
     </state>
     <state x="305" y="168" key="run.anything.popup/0.23.1280.708@0.23.1280.708" timestamp="1585554489734" />
+    <state x="385" y="143" width="670" height="676" key="search.everywhere.popup" timestamp="1586180818242">
+      <screen x="0" y="23" width="1440" height="796" />
+    </state>
+    <state x="385" y="143" width="670" height="676" key="search.everywhere.popup/0.23.1440.796@0.23.1440.796" timestamp="1586180818242" />
   </component>
 </project>
