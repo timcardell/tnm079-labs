@@ -20,7 +20,7 @@ void LoopSubdivisionMesh::Subdivide() {
   HalfEdgeMesh subDivMesh;
   subDivMesh.SetTransform(GetTransform());
   subDivMesh.SetName(GetName());
-  subDivMesh.SetColorMap(GetColorMap());
+  //subDivMesh.SetColorMap(GetColorMap());
   subDivMesh.SetWireframe(GetWireframe());
   subDivMesh.SetShowNormals(GetShowNormals());
   subDivMesh.SetOpacity(GetOpacity());
@@ -107,15 +107,13 @@ std::vector<std::vector<Vector3<float>>>LoopSubdivisionMesh::Subdivide(size_t fa
  */
 Vector3<float> LoopSubdivisionMesh::VertexRule(size_t vertexIndex) {
   // Get the current vertex
-    std::vector<size_t> neigh = HalfEdgeMesh::FindNeighborVertices(vertexIndex);
-    float beta = Beta(neigh.size());
+    std::vector<size_t> valence = HalfEdgeMesh::FindNeighborVertices(vertexIndex);
+  float beta = Beta(valence.size());
 
-  Vector3<float> vtx = (v(vertexIndex).pos*(1-neigh.size()*beta));
-
-  for (int i = 0; i < neigh.size(); i++) {
-      vtx += beta * v(neigh.at(i)).pos;
+  Vector3<float> vtx = (v(vertexIndex).pos * (1 - valence.size() * beta));
+  for (int i = 0; i < valence.size(); i++) {
+      vtx += beta * v(valence.at(i)).pos;
   }
-
   return vtx;
 }
 
@@ -127,14 +125,14 @@ Vector3<float> LoopSubdivisionMesh::EdgeRule(size_t edgeIndex) {
   HalfEdge &e0 = e(edgeIndex);
   HalfEdge &e1 = e(e0.pair);
   HalfEdge &e2 = e(e0.prev);
-  HalfEdge &e3 = e(e0.next);
+  HalfEdge &e3 = e(e1.prev);
 
   Vector3<float> &v0 = v(e0.vert).pos;
   Vector3<float> &v1 = v(e1.vert).pos;
   Vector3<float> &v2 = v(e2.vert).pos;
   Vector3<float> &v3 = v(e3.vert).pos;
 
-  return 3.0f * (v0 + v1) / 8.0f + (v2 + v3) / 8.0f;
+  return 3 * (v0 + v1) / 8 + (v2 + v3) / 8;
 }
 
 //! Return weights for interior verts
