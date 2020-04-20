@@ -16,15 +16,17 @@ void UniformCubicSplineSubdivisionCurve::Subdivide() {
     newc.push_back(mCoefficients.front());
 
     // Implement the subdivision scheme for a natural cubic spline here
-    for (int i = 1; i < (mCoefficients.size() - 1) * 2 - 1; i++) {
+    for (int i = 1; i < (mCoefficients.size()-1)*2 - 1; i++) {
         int j = i;
+        if (i % 2 == 0) {
+            newc.push_back((mCoefficients.at(j / 2 - 1) + (6 * mCoefficients.at(j / 2)) +
+                            mCoefficients.at(j / 2 + 1)) /
+                           8);
+        } 
+		else
+            newc.push_back((4 * mCoefficients.at(j / 2) + 4 * mCoefficients.at(j / 2 + 1)) / 8);
+        }
 
-        newc.push_back((mCoefficients.at(j / 2 - 1) + (6 * mCoefficients.at(j / 2)) +
-                        mCoefficients.at(j / 2 + 1)) /
-                       8);
-
-        newc.push_back((4 * mCoefficients.at(j / 2) + 4 * mCoefficients.at(j / 2 + 1)) / 8);
-    }
         newc.push_back(mCoefficients.back());
         // If 'mCoefficients' had size N, how large should 'newc' be? Perform a check
         // here!
