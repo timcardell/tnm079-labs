@@ -16,50 +16,52 @@ void UniformCubicSplineSubdivisionCurve::Subdivide() {
     newc.push_back(mCoefficients.front());
 
     // Implement the subdivision scheme for a natural cubic spline here
-    for (int i = 1; i < mCoefficients.size()-1; i++) {
+    for (int i = 1; i < (mCoefficients.size() - 1) * 2 - 1; i++) {
         int j = i;
-        newc.push_back( (mCoefficients.at(j--) + (6 * mCoefficients.at(j)) +mCoefficients.at(j++))/8);
-        newc.push_back((4 * mCoefficients.at(j) + 4 * mCoefficients.at(j++))/8);
 
+        newc.push_back((mCoefficients.at(j / 2 - 1) + (6 * mCoefficients.at(j / 2)) +
+                        mCoefficients.at(j / 2 + 1)) /
+                       8);
+
+        newc.push_back((4 * mCoefficients.at(j / 2) + 4 * mCoefficients.at(j / 2 + 1)) / 8);
+    }
+        newc.push_back(mCoefficients.back());
+        // If 'mCoefficients' had size N, how large should 'newc' be? Perform a check
+        // here!
+        std::cout << "size of newc:" << newc.size() << std::endl;
+
+        // assert(newc.size() == (newc.size() * 2) - 1 && "Incorrect number of new coefficients!");
+
+        mCoefficients = newc;
     }
 
-    newc.push_back(mCoefficients.back());
-    // If 'mCoefficients' had size N, how large should 'newc' be? Perform a check
-    // here!
-    std::cout << "size of newc:" << newc.size() << std::endl;
+    void UniformCubicSplineSubdivisionCurve::Render() {
+        // Apply transform
+        glPushMatrix();  // Push modelview matrix onto stack
 
-    // assert(newc.size() == (newc.size() * 2) - 1 && "Incorrect number of new coefficients!");
+        // Convert transform-matrix to format matching GL matrix format
+        // Load transform into modelview matrix
+        glMultMatrixf(mTransform.ToGLMatrix().GetArrayPtr());
 
-    mCoefficients = newc;
-}
+        mControlPolygon.Render();
 
-void UniformCubicSplineSubdivisionCurve::Render() {
-    // Apply transform
-    glPushMatrix();  // Push modelview matrix onto stack
+        // save line point and color states
+        glPushAttrib(GL_POINT_BIT | GL_LINE_BIT | GL_CURRENT_BIT);
 
-    // Convert transform-matrix to format matching GL matrix format
-    // Load transform into modelview matrix
-    glMultMatrixf(mTransform.ToGLMatrix().GetArrayPtr());
+        // draw segments
+        glLineWidth(mLineWidth);
+        glColor3fv(mLineColor.GetArrayPtr());
+        glBegin(GL_LINE_STRIP);
+        // just draw the spline as a series of connected linear segments
+        for (size_t i = 0; i < mCoefficients.size(); i++) {
+            glVertex3fv(mCoefficients.at(i).GetArrayPtr());
+        }
+        glEnd();
 
-    mControlPolygon.Render();
+        // restore attribs
+        glPopAttrib();
 
-    // save line point and color states
-    glPushAttrib(GL_POINT_BIT | GL_LINE_BIT | GL_CURRENT_BIT);
+        glPopMatrix();
 
-    // draw segments
-    glLineWidth(mLineWidth);
-    glColor3fv(mLineColor.GetArrayPtr());
-    glBegin(GL_LINE_STRIP);
-    // just draw the spline as a series of connected linear segments
-    for (size_t i = 0; i < mCoefficients.size(); i++) {
-        glVertex3fv(mCoefficients.at(i).GetArrayPtr());
+        GLObject::Render();
     }
-    glEnd();
-
-    // restore attribs
-    glPopAttrib();
-
-    glPopMatrix();
-
-    GLObject::Render();
-}
