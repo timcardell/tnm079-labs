@@ -11,7 +11,10 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="1f572033-5b5d-4bec-8d8c-e3727ed4a6ae" name="Default Changelist" comment="" />
+    <list default="true" id="1f572033-5b5d-4bec-8d8c-e3727ed4a6ae" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Subdivision/UniformCubicSplineSubdivisionCurve.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Subdivision/UniformCubicSplineSubdivisionCurve.cpp" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -69,6 +72,22 @@
       <screen x="0" y="0" width="1536" height="834" />
     </state>
     <state x="549" y="172" key="FileChooserDialogImpl/0.0.1536.834@0.0.1536.834" timestamp="1587123045168" />
+    <state width="1238" height="142" key="GridCell.Tab.0.bottom" timestamp="1587380681344">
+      <screen x="0" y="23" width="1280" height="708" />
+    </state>
+    <state width="1238" height="142" key="GridCell.Tab.0.bottom/0.23.1280.708@0.23.1280.708" timestamp="1587380681344" />
+    <state width="1238" height="142" key="GridCell.Tab.0.center" timestamp="1587380681343">
+      <screen x="0" y="23" width="1280" height="708" />
+    </state>
+    <state width="1238" height="142" key="GridCell.Tab.0.center/0.23.1280.708@0.23.1280.708" timestamp="1587380681343" />
+    <state width="1238" height="142" key="GridCell.Tab.0.left" timestamp="1587380681342">
+      <screen x="0" y="23" width="1280" height="708" />
+    </state>
+    <state width="1238" height="142" key="GridCell.Tab.0.left/0.23.1280.708@0.23.1280.708" timestamp="1587380681342" />
+    <state width="1238" height="142" key="GridCell.Tab.0.right" timestamp="1587380681343">
+      <screen x="0" y="23" width="1280" height="708" />
+    </state>
+    <state width="1238" height="142" key="GridCell.Tab.0.right/0.23.1280.708@0.23.1280.708" timestamp="1587380681343" />
     <state width="640" height="204" key="ImportCMakeProjectWizard.bottomPanel" timestamp="1587122459135">
       <screen x="0" y="0" width="1536" height="834" />
     </state>
