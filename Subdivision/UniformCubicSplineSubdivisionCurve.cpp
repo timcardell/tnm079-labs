@@ -19,7 +19,7 @@ void UniformCubicSplineSubdivisionCurve::Subdivide() {
     for (int i = 0; i < (mCoefficients.size()-1)*2 - 1; i++) {
         int j = i;
 
-        
+
         if (i % 2 == 0 && i != 0) {
             newc.push_back((mCoefficients.at(j / 2 - 1) + (6 * mCoefficients.at(j / 2)) +
                             mCoefficients.at(j / 2 + 1)) /

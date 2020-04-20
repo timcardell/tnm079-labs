@@ -116,12 +116,21 @@ Vector3<float> LoopSubdivisionMesh::VertexRule(size_t vertexIndex) {
  */
 Vector3<float> LoopSubdivisionMesh::EdgeRule(size_t edgeIndex) {
 
+
+    std::vector<size_t> vert = FindNeighborVertices(edgeIndex);
+    size_t valence = vert.size()-1;
+
+    float b1 = Beta(valence);
+
+
   // Place the edge vertex halfway along the edge
   HalfEdge &e0 = e(edgeIndex);
   HalfEdge &e1 = e(e0.pair);
   Vector3<float> &v0 = v(e0.vert).pos;
   Vector3<float> &v1 = v(e1.vert).pos;
-  return (v0 + v1) * 0.5f;
+
+  std::cout<< b1 << std::endl;
+  return (v0 + v1) * b1;
 }
 
 //! Return weights for interior verts
