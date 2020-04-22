@@ -421,7 +421,7 @@ void HalfEdgeMesh::Update() {
 float HalfEdgeMesh::Area() const {
     float area = 0;
     // Add code here
-    for (size_t i = 0; i < mFaces.size()-1; i++) {
+    for (size_t i = 0; i < mFaces.size(); i++) {
         Face F = mFaces.at(i);
         HalfEdge E0 = e(F.edge);
         HalfEdge E1 = e(E0.next);

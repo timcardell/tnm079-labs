@@ -20,7 +20,7 @@ void LoopSubdivisionMesh::Subdivide() {
   HalfEdgeMesh subDivMesh;
   subDivMesh.SetTransform(GetTransform());
   subDivMesh.SetName(GetName());
-  subDivMesh.SetColorMap(GetColorMap()); //DOSNT WORK
+  subDivMesh.SetColorMap(GetColorMap());
   subDivMesh.SetWireframe(GetWireframe());
   subDivMesh.SetShowNormals(GetShowNormals());
   subDivMesh.SetOpacity(GetOpacity());
