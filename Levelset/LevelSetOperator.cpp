@@ -27,7 +27,7 @@
  * \param[in] a speed function
  * \param[out] ddx2 (dphi/dx)^2
  * \param[out] ddy2 (dphi/dy)^2
- * \param[out] ddz2 (dphi/dy)^2
+ * \param[out] ddz2 (dphi/dz)^2
  */
 void LevelSetOperator::Godunov(size_t i, size_t j, size_t k, float a,
                                float &ddx2, float &ddy2, float &ddz2) {

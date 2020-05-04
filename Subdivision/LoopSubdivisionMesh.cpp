@@ -106,12 +106,15 @@ std::vector<std::vector<Vector3<float>>>LoopSubdivisionMesh::Subdivide(size_t fa
 /*! Computes a new vertex, replacing a vertex in the old mesh
  */
 Vector3<float> LoopSubdivisionMesh::VertexRule(size_t vertexIndex) {
-  // Get the current vertex
-    std::vector<size_t> valence = HalfEdgeMesh::FindNeighborVertices(vertexIndex);
-  float beta = Beta(valence.size());
+  // Get the current vertex and its neighbourhood
+    
+  std::vector<size_t> valence = HalfEdgeMesh::FindNeighborVertices(vertexIndex);
+  int n = valence.size();
+  float beta = Beta(n);
 
-  Vector3<float> vtx = (v(vertexIndex).pos * (1 - valence.size() * beta));
-  for (int i = 0; i < valence.size(); i++) {
+  Vector3<float> vtx = (v(vertexIndex).pos * (1 - n * beta));
+
+  for (int i = 0; i < n; i++) {
       vtx += beta * v(valence.at(i)).pos;
   }
   return vtx;
@@ -132,7 +135,7 @@ Vector3<float> LoopSubdivisionMesh::EdgeRule(size_t edgeIndex) {
   Vector3<float> &v2 = v(e2.vert).pos;
   Vector3<float> &v3 = v(e3.vert).pos;
 
-  return 3 * (v0 + v1) / 8 + (v2 + v3) / 8;
+  return (3 * (v0 + v1) / 8 )+ ((v2 + v3) / 8);
 }
 
 //! Return weights for interior verts
