@@ -147,7 +147,6 @@ void FluidSolver::ExternalForces(float dt) {
         return;
     }
 
-
   float x, y, z;
   for (size_t i = 0; i < mVoxels.GetDimX(); i++) {
       for (size_t j = 0; j < mVoxels.GetDimY(); j++) {
@@ -159,6 +158,7 @@ void FluidSolver::ExternalForces(float dt) {
         // update the velocity field (mVelocityField). The simplest possible
         // integrator is the explicit Euler.
         // TODO: Add code here
+
           if (IsFluid(i, j, k)) {
             TransformGridToWorld(i, j, k, x, y, z);
              Vector3<float> velocities = mVelocityField.GetValue(i, j, k) + (dt * mExternalForces->GetValue(x, y, z));
@@ -183,7 +183,7 @@ void FluidSolver::SelfAdvection(float dt, int steps) {
 // Enforce the Dirichlet boundary conditions
 void FluidSolver::EnforceDirichletBoundaryCondition() {
 
-    Vector3<float> velocityFieldValue = {0.0f, 0.0f, 0.0f};
+    Vector3<float> TempVelocity = {0.0f, 0.0f, 0.0f};
 
   for (size_t i = 0; i < mVoxels.GetDimX(); i++) {
         for (size_t j = 0; j < mVoxels.GetDimY(); j++) {
@@ -196,27 +196,27 @@ void FluidSolver::EnforceDirichletBoundaryCondition() {
         // TODO: Add code here
 
           if (IsFluid(i, j, k)) {
-            velocityFieldValue = mVelocityField.GetValue(i,j,k);
+            TempVelocity = mVelocityField.GetValue(i, j, k);
 
             //I
               if (IsSolid(i - 1, j, k) && mVelocityField.GetValue(i, j, k)[0] < 0.0f) {
-                velocityFieldValue[0] = 0;
+                TempVelocity[0] = 0;
               } else if (IsSolid(i + 1, j, k) && mVelocityField.GetValue(i, j, k)[0] > 0.0f) {
-                  velocityFieldValue[0] = 0;
+                  TempVelocity[0] = 0;
             }
             //J
             if (IsSolid(i, j - 1, k) && mVelocityField.GetValue(i, j, k)[1] < 0.0f) {
-                velocityFieldValue[1] = 0;
+                TempVelocity[1] = 0;
             } else if (IsSolid(i, j + 1, k) && mVelocityField.GetValue(i, j, k)[1] > 0.0f) {
-                velocityFieldValue[1] = 0;
+                TempVelocity[1] = 0;
             }
             //K
             if (IsSolid(i, j, k - 1) && mVelocityField.GetValue(i, j, k)[2] < 0.0f) {
-                velocityFieldValue[2] = 0;
+                TempVelocity[2] = 0;
             } else if (IsSolid(i, j, k + 1) && mVelocityField.GetValue(i, j, k)[2] > 0.0f) {
-                velocityFieldValue[2] = 0;
+                TempVelocity[2] = 0;
             }
-            mVelocityField.SetValue(i, j, k, velocityFieldValue);
+            mVelocityField.SetValue(i, j, k, TempVelocity);
           }
       }
     }
