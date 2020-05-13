@@ -143,13 +143,15 @@ float FluidSolver::ComputeKineticEnergy() { return 0; }
 
 // Add the external forces
 void FluidSolver::ExternalForces(float dt) {
-  if (mExternalForces == NULL)
-    return;
+    if (mExternalForces == NULL) {
+        return;
+    }
+
 
   float x, y, z;
-  for (int i = 0; i < mVoxels.GetDimX(); i++) {
-    for (int j = 0; j < mVoxels.GetDimY(); j++) {
-      for (int k = 0; k < mVoxels.GetDimZ(); k++) {
+  for (size_t i = 0; i < mVoxels.GetDimX(); i++) {
+      for (size_t j = 0; j < mVoxels.GetDimY(); j++) {
+          for (size_t k = 0; k < mVoxels.GetDimZ(); k++) {
 
         // If we're in fluid (see FluidSolver::IsFluid()), sample the external
         // force field (using world coordinates, see
@@ -157,11 +159,12 @@ void FluidSolver::ExternalForces(float dt) {
         // update the velocity field (mVelocityField). The simplest possible
         // integrator is the explicit Euler.
         // TODO: Add code here
-
-          // OBS: DELETE FOLLOWING LINE, IT'S JUST HERE TO SUPPRESS A WARNING FOR UNUSED VARIABLES
-          x = 1.0f;
-          y = 1.0f;
-          z = 1.0f;
+          if (IsFluid(i, j, k)) {
+            TransformGridToWorld(i, j, k, x, y, z);
+             Vector3<float> velocities = mVelocityField.GetValue(i, j, k) + (dt * mExternalForces->GetValue(x, y, z));
+            mVelocityField.SetValue(i,j,k,velocities);
+          }
+      
       }
     }
   }
@@ -169,42 +172,52 @@ void FluidSolver::ExternalForces(float dt) {
 
 // Compute the self advection term
 void FluidSolver::SelfAdvection(float dt, int steps) {
-  // Copy the current velocity field
-  Volume<Vector3<float>> velocities = mVelocityField;
+    // Copy the current velocity field
+    Volume<Vector3<float>> velocities = mVelocityField;
 
-  for (int i = 0; i < mVoxels.GetDimX(); i++) {
-    for (int j = 0; j < mVoxels.GetDimY(); j++) {
-      for (int k = 0; k < mVoxels.GetDimZ(); k++) {
 
-        // If we're in fluid, sample the current velocity field at (i,j,k).
-        // Then, trace a particle at initial position (i,j,k) back in time
-        // through the velocity field using 'steps' number of steps. Note that
-        // each step is dt/steps time units long. Note also that the velocities
-        // are given in world space, but you perform the trace in grid space so
-        // you need to scale the velocities accordingly (grid spacing: mDx).
-        // When you trace the particle you interpolate the velocities inbetween
-        // the grid points, use mVelocityField.GetValue(float i, float j, float
-        // k) for trilinear interpolation.
-        // TODO: Add code here
-      }
-    }
-  }
-
-  // Update the current velocity field
-  mVelocityField = velocities;
+    // Update the current velocity field
+    mVelocityField = velocities;
 }
 
 // Enforce the Dirichlet boundary conditions
 void FluidSolver::EnforceDirichletBoundaryCondition() {
-  for (int i = 0; i < mVoxels.GetDimX(); i++) {
-    for (int j = 0; j < mVoxels.GetDimY(); j++) {
-      for (int k = 0; k < mVoxels.GetDimZ(); k++) {
+
+    Vector3<float> velocityFieldValue = {0.0f, 0.0f, 0.0f};
+
+  for (size_t i = 0; i < mVoxels.GetDimX(); i++) {
+        for (size_t j = 0; j < mVoxels.GetDimY(); j++) {
+          for (size_t k = 0; k < mVoxels.GetDimZ(); k++) {
 
         // If we're in fluid, check the neighbors of (i,j,k) to
         // see if it's next to a solid boundary. If so, project
         // the velocity to the boundary plane by setting the
         // velocity to zero along the given dimension.
         // TODO: Add code here
+
+          if (IsFluid(i, j, k)) {
+            velocityFieldValue = mVelocityField.GetValue(i,j,k);
+
+            //I
+              if (IsSolid(i - 1, j, k) && mVelocityField.GetValue(i, j, k)[0] < 0.0f) {
+                velocityFieldValue[0] = 0;
+              } else if (IsSolid(i + 1, j, k) && mVelocityField.GetValue(i, j, k)[0] > 0.0f) {
+                  velocityFieldValue[0] = 0;
+            }
+            //J
+            if (IsSolid(i, j - 1, k) && mVelocityField.GetValue(i, j, k)[1] < 0.0f) {
+                velocityFieldValue[1] = 0;
+            } else if (IsSolid(i, j + 1, k) && mVelocityField.GetValue(i, j, k)[1] > 0.0f) {
+                velocityFieldValue[1] = 0;
+            }
+            //K
+            if (IsSolid(i, j, k - 1) && mVelocityField.GetValue(i, j, k)[2] < 0.0f) {
+                velocityFieldValue[2] = 0;
+            } else if (IsSolid(i, j, k + 1) && mVelocityField.GetValue(i, j, k)[2] > 0.0f) {
+                velocityFieldValue[2] = 0;
+            }
+            mVelocityField.SetValue(i, j, k, velocityFieldValue);
+          }
       }
     }
   }
@@ -226,12 +239,11 @@ void FluidSolver::Projection() {
   std::vector<float> x(elements, 0), b(elements, 0);
 
   float dx2 = mDx * mDx;
-
+  float divergence = 0.0f;
   std::cerr << "Building A matrix and b vector..." << std::endl;
-  for (int i = 0; i < mVoxels.GetDimX(); i++) {
-    for (int j = 0; j < mVoxels.GetDimY(); j++) {
-      for (int k = 0; k < mVoxels.GetDimZ(); k++) {
-
+  for (size_t i = 0; i < mVoxels.GetDimX(); i++) {
+      for (size_t j = 0; j < mVoxels.GetDimY(); j++) {
+          for (size_t k = 0; k < mVoxels.GetDimZ(); k++) {
         // If we're in fluid...
         if (IsFluid(i, j, k)) {
 
@@ -246,8 +258,15 @@ void FluidSolver::Projection() {
           size_t ind_km = mVoxels.ComputeLinearIndex(i, j, k - 1);
 
           // Compute entry for b vector (divergence of the velocity field:
-          // \nabla \dot w_i,j,k)
+          // \nabla \dot V_i,j,k)
           // TODO: Add code here
+          
+          divergence =
+              (mVelocityField.GetValue(i + 1, j, k)[0] - mVelocityField.GetValue(i - 1, j, k)[0] +
+               mVelocityField.GetValue(i , j+ 1, k)[1] - mVelocityField.GetValue(i , j -1, k)[1] +
+               mVelocityField.GetValue(i, j, k + 1)[2] - mVelocityField.GetValue(i, j, k - 1)[2])/
+              (2.0f * mDx);
+          b.at(ind) = divergence;
 
           // Compute entries for A matrix (discrete Laplacian operator).
           // The A matrix is a sparse matrix but can be used like a regular
@@ -260,6 +279,52 @@ void FluidSolver::Projection() {
           // a solid (allow no change of flow in that direction).
           // Remember to treat the boundaries of (i,j,k).
           // TODO: Add code here
+             int solids = 0;
+
+             if (IsSolid(i + 1, j, k) ) {
+                 A(ind, ind_ip) = 0;
+                 solids++;
+             } else {
+                 A(ind, ind_ip) = 1.0f / dx2;
+             }
+
+               if (IsSolid(i - 1, j, k) ) {
+                 A(ind, ind_im) = 0;
+                 solids++;
+             } else {
+                 A(ind, ind_im) = 1.0f / dx2;
+             }
+
+             if (IsSolid(i, j + 1, k) ) {
+                 A(ind, ind_jp) = 0;
+                 solids++;
+             } else {
+                 A(ind, ind_jp) = 1.0f / dx2;
+             }
+
+             if (IsSolid(i, j - 1, k)) {
+                 A(ind, ind_jm) = 0;
+                 solids++;
+             } else {
+                 A(ind, ind_jm) = 1.0f / dx2;
+             }
+
+             if (IsSolid(i, j, k + 1)) {
+                 A(ind, ind_kp) = 0;
+                 solids++;
+             } else {
+                 A(ind, ind_kp) = 1.0f / dx2;
+             }
+
+             if (IsSolid(i, j, k - 1)) {
+                 A(ind, ind_km) = 0;
+                 solids++;
+             } else {
+                 A(ind, ind_km) = 1.0f / dx2;
+             }
+
+              A(ind, ind) = (solids-6.0f)/dx2;
+
         }
       }
     }
@@ -278,8 +343,8 @@ void FluidSolver::Projection() {
 
   // Subtract the gradient of x to preserve the volume
   for (int i = 0; i < mVoxels.GetDimX(); i++) {
-    for (int j = 0; j < mVoxels.GetDimY(); j++) {
-      for (int k = 0; k < mVoxels.GetDimZ(); k++) {
+      for (int j = 0; j < mVoxels.GetDimY(); j++) {
+          for (int k = 0; k < mVoxels.GetDimZ(); k++) {
 
         // If we're in fluid...
         if (IsFluid(i, j, k)) {
@@ -296,6 +361,14 @@ void FluidSolver::Projection() {
           // and subtract this gradient from the velocity field.
           // Thereby removing divergence - preserving volume.
           // TODO: Add code here
+
+          float Dx = (x[ind_ip] - x[ind_im]) / (2.0f * mDx);
+          float Dy = (x[ind_jp] - x[ind_jm]) / (2.0f * mDx);
+          float Dz = (x[ind_kp] - x[ind_km]) / (2.0f * mDx);
+
+          Vector3<float> Grad = {Dx,Dy,Dz};
+          Vector3<float> newVal = mVelocityField.GetValue(float(i),float(j),float(k)) - Grad;
+          mVelocityField.SetValue(i, j, k,newVal);
         }
       }
     }

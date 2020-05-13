@@ -37,7 +37,6 @@ public:
   virtual float ComputeTimestep() {
     // Compute and return a stable timestep
     // (Hint: Function3D::GetMaxValue())
-    
     return mLS->GetDx() / mVectorField->GetMaxValue().Length();
   }
 
@@ -73,7 +72,7 @@ public:
     float DeltaX, DeltaY, DeltaZ;
     mLS->TransformGridToWorld(x,y,z);
 
-    Vector3<float> Vec = mVectorField->GetMaxValue();
+    Vector3<float> Vec = mVectorField->GetValue(x,y,z);
 
     if (Vec[0] < 0) {
         DeltaX = mLS->DiffXp(i, j, k);
@@ -98,7 +97,7 @@ public:
     }
 
     Vector3<float> res = Vector3<float>(DeltaX, DeltaY, DeltaZ);
-    return -mVectorField->GetValue(x,y,z) * res;
+    return -Vec * res;
   }
 };
 
